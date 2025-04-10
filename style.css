@@ -1,0 +1,50 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0f0f0f;
+    font-family: 'Segoe UI', sans-serif;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.neu-core {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+.pulse {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    background: radial-gradient(circle, #00ffe5 0%, #0f0f0f 80%);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.6; }
+}
+.chat {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+}
+.message {
+    margin-bottom: 10px;
+}
+#chat-box {
+    min-height: 60px;
+    margin-bottom: 10px;
+}
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #333;
+    color: #eee;
+}
