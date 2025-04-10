@@ -5,6 +5,14 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "API key is missing." });
   }
 
+  // Обработка тела запроса
+  let messages;
+  try {
+    messages = JSON.parse(req.body).messages;
+  } catch (error) {
+    return res.status(400).json({ error: "Invalid request body." });
+  }
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -13,7 +21,7 @@ export default async function handler(req, res) {
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: req.body.messages,
+      messages: messages,
       temperature: 0.8
     })
   });
