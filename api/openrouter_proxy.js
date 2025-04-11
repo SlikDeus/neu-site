@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
         "X-Title": "NEU AI"
       },
       body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo", // можно заменить на mistral или др
+        model: "mistralai/mistral-7b-instruct", // можно заменить на mistral или др
         messages,
         temperature: 0.8
       })
