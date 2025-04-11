@@ -1,4 +1,3 @@
-
 module.exports = async function handler(req, res) {
   const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -8,10 +7,13 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method !== "POST") {
+    console.warn("⚠️ Method Not Allowed:", req.method);
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   const { messages } = req.body;
+
+  console.log("📥 Получено messages:", JSON.stringify(messages, null, 2));
 
   if (!messages || !Array.isArray(messages)) {
     console.error("❌ Invalid messages format.");
@@ -35,6 +37,8 @@ module.exports = async function handler(req, res) {
     });
 
     const data = await response.json();
+
+    console.log("📤 Ответ от OpenRouter:", JSON.stringify(data, null, 2));
 
     if (data.error) {
       console.error("❌ OpenRouter API Error:", data.error);
