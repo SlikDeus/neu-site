@@ -42,6 +42,8 @@
     }
 
     #chat-box {
+      border-radius: 0;
+      clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%);
       z-index: 1;
       width: 90%;
       max-width: 800px;
@@ -68,17 +70,17 @@
     }
 
     .message.user {
-      background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
-      align-self: flex-end;
-      color: #a0f0ff;
-      border: 1px solid #00f0ff33;
+      clip-path: polygon(0 0, 95% 0, 100% 20%, 100% 100%, 5% 100%, 0 80%);
+      background: linear-gradient(145deg, #122, #1a1a1a);
+      box-shadow: 0 0 10px #0ff3, 0 0 25px #0ff1;
+      font-weight: 600;
     }
 
     .message.ai {
-      background: linear-gradient(145deg, #1a1a1a, #242424);
-      align-self: flex-start;
-      color: #ffffff;
-      border: 1px solid #ffffff11;
+      clip-path: polygon(0 0, 95% 0, 100% 20%, 100% 100%, 5% 100%, 0 80%);
+      background: linear-gradient(145deg, #111, #1a1a1a);
+      box-shadow: 0 0 10px #fff1, 0 0 25px #fff1;
+      font-weight: 500;
     }
 
     @keyframes fadeIn {
@@ -113,6 +115,9 @@
     }
 
     #send-button {
+      clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%, 10% 50%);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       padding: 1rem 1.5rem;
       background: linear-gradient(to right, #00f0ff, #00bcd4);
       border: none;
@@ -128,8 +133,7 @@
       transform: scale(1.05);
       box-shadow: 0 0 10px #00f0ff99;
     }
-      
-    /* Искажение фона / нейронное мерцание */
+
     @keyframes pulse-bg {
       0% { filter: brightness(1) hue-rotate(0deg); }
       50% { filter: brightness(1.05) hue-rotate(10deg); }
@@ -149,7 +153,6 @@
       z-index: 0;
     }
 
-    /* Частицы */
     #particles {
       position: absolute;
       top: 0;
@@ -185,7 +188,6 @@
       }
     }
 
-    /* Индикатор "NEU думает..." */
     #thinking-indicator {
       font-size: 0.9rem;
       color: #888;
@@ -195,7 +197,16 @@
       text-align: center;
       height: 1rem;
     }
-</style>
+
+    #neu-logo-bg.active {
+      animation: pulseActive 0.5s ease-in-out;
+    }
+
+    @keyframes pulseActive {
+      0% { text-shadow: 0 0 40px #00f0ffcc; transform: scale(1.05); }
+      100% { text-shadow: 0 0 60px #00f0ff66; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
   <div id="particles"></div>
@@ -206,7 +217,9 @@
     <input type="text" id="user-input" placeholder="Talk to NEU..." />
     <button id="send-button">Send</button>
   </div>
-  <script src="/script.js">    for (let i = 0; i < 60; i++) {
+  <script src="/script.js"></script>
+  <script>
+    for (let i = 0; i < 60; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.style.top = Math.random() * 100 + 'vh';
@@ -227,13 +240,16 @@
     });
 
     observer.observe(chatBox, { childList: true });
-  <script>
+
     const sendButton = document.getElementById("send-button");
     const inputField = document.getElementById("user-input");
+    const logo = document.getElementById("neu-logo-bg");
     sendButton.addEventListener("click", () => {
       const event = new KeyboardEvent("keypress", {
         key: "Enter",
       });
+      logo.classList.add("active");
+      setTimeout(() => logo.classList.remove("active"), 500);
       inputField.dispatchEvent(event);
     });
   </script>
