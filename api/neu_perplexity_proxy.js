@@ -1,4 +1,3 @@
-
 module.exports = async function handler(req, res) {
   const PPLX_API_KEY = process.env.PERPLEXITY_API_KEY;
 
@@ -25,7 +24,7 @@ module.exports = async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "sonar-small-chat",
+        model: "pplx-7b-chat", // ✅ заменили на рабочую модель
         messages,
         temperature: 0.7
       })
