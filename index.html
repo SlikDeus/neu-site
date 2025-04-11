@@ -1,257 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEU</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      background: linear-gradient(180deg, #0a0a0a, #040404, #000000);
+      background-color: #0b0b0b;
+      color: #c5f0f0;
       font-family: 'Orbitron', sans-serif;
-      color: #ffffff;
+      margin: 0;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
 
-    #neu-logo-bg {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 6rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.08);
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 60px #00f0ff55;
-      animation: breathe 6s ease-in-out infinite;
-      user-select: none;
-      pointer-events: none;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0.06; transform: translateX(-50%) scale(1); }
-      50% { opacity: 0.12; transform: translateX(-50%) scale(1.05); }
-    }
-
-    #chat-box {
-      border-radius: 0;
-      clip-path: polygon(0 0, 95% 0, 100% 10%, 100% 100%, 5% 100%, 0 90%);
-      z-index: 1;
-      width: 90%;
-      max-width: 800px;
-      height: 65vh;
-      background: rgba(0, 0, 0, 0.4);
-      border: 2px solid #00f0ff;
-      border-radius: 20px;
-      padding: 1.5rem;
-      overflow-y: auto;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px #00f0ff88, 0 0 30px #00ffff33;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .message {
-      margin-bottom: 1.2rem;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      max-width: 80%;
-      line-height: 1.6;
-      font-size: 1rem;
-      animation: fadeIn 0.4s ease-in-out;
-    }
-
-    .message.user {
-      clip-path: polygon(0 0, 95% 0, 100% 20%, 100% 100%, 5% 100%, 0 80%);
-      background: linear-gradient(145deg, #122, #1a1a1a);
-      box-shadow: 0 0 10px #0ff3, 0 0 25px #0ff1;
-      font-weight: 600;
-    }
-
-    .message.ai {
-      clip-path: polygon(0 0, 95% 0, 100% 20%, 100% 100%, 5% 100%, 0 80%);
-      background: linear-gradient(145deg, #111, #1a1a1a);
-      box-shadow: 0 0 10px #fff1, 0 0 25px #fff1;
-      font-weight: 500;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    #input-area {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      align-items: center;
+    .chat-container {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #05f2db;
+      border-radius: 8px;
       padding: 1rem;
       width: 90%;
       max-width: 800px;
+      box-shadow: 0 0 20px #05f2db44;
     }
 
-    #user-input {
+    .message {
+      clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px);
+      border: 1px solid #05f2db;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      background: rgba(10, 10, 10, 0.8);
+    }
+
+    .message.user {
+      border-width: 2px;
+      box-shadow: 0 0 10px #00ff95, 0 0 20px #00ff95aa;
+      border-color: #00ff95;
+      background: rgba(0, 64, 0, 0.5);
+      color: #00ff95;
+    }
+
+    .message.ai {
+      border-width: 2px;
+      box-shadow: 0 0 10px #05f2db, 0 0 20px #05f2dbaa;
+      border-color: #00ff95;
+      background: rgba(0, 16, 32, 0.5);
+      color: #05f2db;
+    }
+
+    .input-area {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    input[type="text"] {
       flex: 1;
-      padding: 1rem 1.2rem;
+      padding: 1rem;
       font-size: 1rem;
-      border: 2px solid #00f0ff;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.4);
-      color: #ffffff;
-      outline: none;
-      backdrop-filter: blur(8px);
+      background: #111;
+      color: #05f2db;
+      border: 2px solid #05f2db;
+      border-radius: 4px;
     }
 
-    #user-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    #send-button {
-      clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%, 10% 50%);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 1rem 1.5rem;
-      background: linear-gradient(to right, #00f0ff, #00bcd4);
-      border: none;
-      border-radius: 12px;
+    button {
+      padding: 1rem 2rem;
+      background: #05f2db;
       color: #000;
       font-weight: bold;
-      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.3s;
     }
 
-    #send-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #00f0ff99;
+    button:hover {
+      background: #00aaff;
     }
-
-    @keyframes pulse-bg {
-      0% { filter: brightness(1) hue-rotate(0deg); }
-      50% { filter: brightness(1.05) hue-rotate(10deg); }
-      100% { filter: brightness(1) hue-rotate(0deg); }
-    }
-
-    body::before {
-      content: "";
-      position: absolute;
+  </style>
+  <style>
+    canvas#matrix-canvas {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at center, rgba(0,255,255,0.03), transparent 70%);
-      pointer-events: none;
-      animation: pulse-bg 6s infinite ease-in-out;
-      z-index: 0;
-    }
-
-    #particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .particle {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: #00f0ff;
-      opacity: 0.4;
-      border-radius: 50%;
-      animation: float 10s infinite linear;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0) translateX(0);
-        opacity: 0.4;
-      }
-      50% {
-        transform: translateY(-30vh) translateX(10vw);
-        opacity: 0.6;
-      }
-      100% {
-        transform: translateY(-60vh) translateX(-10vw);
-        opacity: 0.1;
-      }
-    }
-
-    #thinking-indicator {
-      font-size: 0.9rem;
-      color: #888;
-      font-style: italic;
-      margin-top: 0.5rem;
-      animation: fadeIn 1s ease-in-out;
-      text-align: center;
-      height: 1rem;
-    }
-
-    #neu-logo-bg.active {
-      animation: pulseActive 0.5s ease-in-out;
-    }
-
-    @keyframes pulseActive {
-      0% { text-shadow: 0 0 40px #00f0ffcc; transform: scale(1.05); }
-      100% { text-shadow: 0 0 60px #00f0ff66; transform: scale(1); }
+      z-index: -1;
+      background: black;
     }
   </style>
 </head>
 <body>
-  <div id="particles"></div>
-  <div id="neu-logo-bg">NEU</div>
-  <div id="chat-box"></div>
-  <div id="thinking-indicator"></div>
-  <div id="input-area">
-    <input type="text" id="user-input" placeholder="Talk to NEU..." />
+  <canvas id="matrix-canvas"></canvas>
+  <div class="chat-container" id="chat-box">
+    <div class="message ai">Welcome to NEU. I don’t do chit-chat.</div>
+  </div>
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Talk to NEU...">
     <button id="send-button">Send</button>
   </div>
-  <script src="/script.js"></script>
-  <script>
-    for (let i = 0; i < 60; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.top = Math.random() * 100 + 'vh';
-      p.style.left = Math.random() * 100 + 'vw';
-      p.style.animationDuration = (8 + Math.random() * 6) + 's';
-      document.getElementById('particles').appendChild(p);
-    }
 
-    const thinking = document.getElementById("thinking-indicator");
+  <script>
+    const sendButton = document.getElementById("send-button");
+    const inputField = document.getElementById("user-input");
     const chatBox = document.getElementById("chat-box");
 
-    const observer = new MutationObserver(() => {
-      const lastMsg = chatBox.lastElementChild;
-      if (lastMsg && lastMsg.classList.contains("ai")) {
-        thinking.textContent = "NEU is thinking...";
-        setTimeout(() => { thinking.textContent = ""; }, 2000);
+    sendButton.addEventListener("click", () => {
+      const message = inputField.value.trim();
+      if (message !== "") {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "message user";
+        msgDiv.textContent = message;
+        chatBox.appendChild(msgDiv);
+        inputField.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        const aiDiv = document.createElement("div");
+        aiDiv.className = "message ai";
+        aiDiv.textContent = "Processing your message...";
+        chatBox.appendChild(aiDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
       }
     });
 
-    observer.observe(chatBox, { childList: true });
-
-    const sendButton = document.getElementById("send-button");
-    const inputField = document.getElementById("user-input");
-    const logo = document.getElementById("neu-logo-bg");
-    sendButton.addEventListener("click", () => {
-      const event = new KeyboardEvent("keypress", {
-        key: "Enter",
-      });
-      logo.classList.add("active");
-      setTimeout(() => logo.classList.remove("active"), 500);
-      inputField.dispatchEvent(event);
+    inputField.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        sendButton.click();
+      }
     });
+  </script>
+  <script>
+    const canvas = document.getElementById("matrix-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "アァイィウエエオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂッテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const matrix = chars.split("");
+
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const colors = ["#00fff7", "#ff00e0", "#00ff95", "#05f2db"];
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = matrix[Math.floor(Math.random() * matrix.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 80);
   </script>
 </body>
 </html>
