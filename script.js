@@ -39,7 +39,7 @@ function appendMessage(sender, text) {
 
 // Функция отправки запроса на прокси /api/openai_proxy
 async function getGPTResponse(history) {
-    const endpoint = "/api/openrouter_proxy";
+    const endpoint = "/api/openrouter_proxy_gemma27b";
 
     try {
         const response = await fetch(endpoint, {
