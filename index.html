@@ -21,12 +21,12 @@
 
     .chat-container {
       background: rgba(0, 0, 0, 0.6);
-      border: 2px solid #05f2db;
+      border: 2px solid red;
       border-radius: 8px;
       padding: 1rem;
       width: 90%;
       max-width: 800px;
-      box-shadow: 0 0 20px #05f2db44;
+      box-shadow: 0 0 20px red;
     }
 
     .message {
@@ -40,18 +40,18 @@
 
     .message.user {
       border-width: 2px;
-      box-shadow: 0 0 10px #00ff95, 0 0 20px #00ff95aa;
-      border-color: #00ff95;
+      box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00aa;
+      border-color: #00ff00;
       background: rgba(0, 64, 0, 0.5);
-      color: #00ff95;
+      color: #00ff00;
     }
 
     .message.ai {
       border-width: 2px;
-      box-shadow: 0 0 10px #05f2db, 0 0 20px #05f2dbaa;
-      border-color: #00ff95;
+      box-shadow: 0 0 10px #0066ff, 0 0 20px #0066ffaa;
+      border-color: #0066ff;
       background: rgba(0, 16, 32, 0.5);
-      color: #05f2db;
+      color: #0066ff;
     }
 
     .input-area {
@@ -86,6 +86,17 @@
     button:hover {
       background: #00aaff;
     }
+      .neu-logo {
+      animation: pulse 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px #05f2db);
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.06); opacity: 0.75; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
   <style>
     canvas#matrix-canvas {
@@ -101,6 +112,10 @@
 </head>
 <body>
   <canvas id="matrix-canvas"></canvas>
+  <svg class="neu-logo" width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="95" stroke="#05f2db" stroke-width="10"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#05f2db" font-family="Orbitron, sans-serif" font-size="38">NEU</text>
+</svg>
   <div class="chat-container" id="chat-box">
     <div class="message ai">Welcome to NEU. I don’t do chit-chat.</div>
   </div>
