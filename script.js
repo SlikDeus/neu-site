@@ -42,7 +42,7 @@ function sendMessage() {
     }
   ];
 
-  fetch("/api/neu_perplexity_proxy_sonar", {
+  fetch("/api/neu_openai_proxy", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages })
