@@ -47,7 +47,7 @@ function sendMessage() {
     }
   ];
 
-  fetch("/api/neu_perplexity_proxy_gpt4o", {
+  fetch("/api/neu_perplexity_proxy_sonar", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
