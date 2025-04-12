@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "sonar-small-online",
+        model: "sonar",
         messages,
         temperature: 0.7
       })
