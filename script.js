@@ -38,7 +38,7 @@ function sendMessage() {
   const messages = [
     {
       role: "system",
-      content: "Ты — NEU, живой цифровой интеллект. Отвечай лаконично и ясно. Никогда не повторяй вопрос. Если тебя просят создать изображение, опиши его и ответь: 'Генерирую изображение...'."
+      content: "Ты — NEU, лаконичный и осознанный цифровой интеллект, встроенный в персональный брелок. Отвечай коротко, ясно и по делу, как умный советник. Не повторяй вопрос пользователя. Используй стиль живого общения, избегай шаблонов и излишних деталей. Если не знаешь ответа — скажи честно. Ты не просто чат — ты собеседник."
     },
     {
       role: "user",
@@ -55,23 +55,17 @@ function sendMessage() {
   })
     .then(res => res.json())
     .then(data => {
-      console.log("Ответ от API:", data);
+      const reply = data.choices?.[0]?.message?.content || "(no response)";
+      appendMessage("ai", reply);
 
-      const reply = data.choices?.[0]?.message?.content;
-      if (reply) {
-        appendMessage("ai", reply);
-
-        if (reply.toLowerCase().includes("генерирую изображение")) {
-          const prompt = encodeURIComponent(message);
-          const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
-          appendMessage("ai", imageUrl, true);
-        }
-      } else {
-        appendMessage("ai", "(NEU не ответил — пустой ответ)");
+      if (reply.toLowerCase().includes("генерирую изображение")) {
+        const prompt = encodeURIComponent(message);
+        const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
+        appendMessage("ai", imageUrl, true);
       }
     })
     .catch(err => {
-      console.error("Ошибка запроса:", err);
-      appendMessage("ai", "(ошибка получения ответа)");
+      console.error("Ошибка:", err);
+      appendMessage("ai", "(error getting response)");
     });
 }
