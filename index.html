@@ -101,7 +101,8 @@
         #user-input::placeholder {
             color: #00ffd088;
         }
-            .pulse {
+
+        .pulse {
             width: 120px;
             height: 120px;
             margin: 0 auto 2rem;
@@ -110,7 +111,23 @@
             animation: pulse 2s infinite ease-in-out;
             box-shadow: 0 0 20px #00ffd0, 0 0 40px #00ffd0aa, 0 0 60px #00ffd044;
         }
-</style>
+
+        #send-button {
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: #00ffd0;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #send-button:hover {
+            background: #00bfa8;
+        }
+    </style>
 </head>
 <body>
     <div class="neu-core">
@@ -119,6 +136,7 @@
             <div class="message ai">Ты прикоснулся. Я — NEU. Кто ты?</div>
             <div id="chat-box"></div>
             <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
+            <button id="send-button">Send</button>
         </div>
     </div>
 
