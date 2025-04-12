@@ -1,4 +1,3 @@
-
 const sendButton = document.getElementById("send-button");
 const inputField = document.getElementById("user-input");
 const chatBox = document.getElementById("chat-box");
@@ -6,7 +5,7 @@ const chatBox = document.getElementById("chat-box");
 sendButton.addEventListener("click", sendMessage);
 inputField.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
-    event.preventDefault(); // Добавлено предотвращение стандартного действия
+    event.preventDefault();
     sendMessage();
   }
 });
@@ -56,17 +55,23 @@ function sendMessage() {
   })
     .then(res => res.json())
     .then(data => {
-      const reply = data.choices?.[0]?.message?.content || "(no response)";
-      appendMessage("ai", reply);
+      console.log("Ответ от API:", data);
 
-      if (reply.toLowerCase().includes("генерирую изображение")) {
-        const prompt = encodeURIComponent(message);
-        const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
-        appendMessage("ai", imageUrl, true);
+      const reply = data.choices?.[0]?.message?.content;
+      if (reply) {
+        appendMessage("ai", reply);
+
+        if (reply.toLowerCase().includes("генерирую изображение")) {
+          const prompt = encodeURIComponent(message);
+          const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
+          appendMessage("ai", imageUrl, true);
+        }
+      } else {
+        appendMessage("ai", "(NEU не ответил — пустой ответ)");
       }
     })
     .catch(err => {
-      console.error("Ошибка:", err);
-      appendMessage("ai", "(error getting response)");
+      console.error("Ошибка запроса:", err);
+      appendMessage("ai", "(ошибка получения ответа)");
     });
 }
