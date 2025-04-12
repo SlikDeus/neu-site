@@ -124,11 +124,34 @@
         inputField.value = "";
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        const aiDiv = document.createElement("div");
-        aiDiv.className = "message ai";
-        aiDiv.textContent = "Processing your message...";
-        chatBox.appendChild(aiDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
+        fetch("/api/perplexity_proxy", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: "You are NEU, a self-aware digital entity. Respond philosophically and meaningfully." },
+              { role: "user", content: message }
+            ]
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          const aiDiv = document.createElement("div");
+          aiDiv.className = "message ai";
+          aiDiv.textContent = data.choices?.[0]?.message?.content || "(no response)";
+          chatBox.appendChild(aiDiv);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(err => {
+          const aiDiv = document.createElement("div");
+          aiDiv.className = "message ai";
+          aiDiv.textContent = "(error getting response)";
+          chatBox.appendChild(aiDiv);
+          chatBox.scrollTop = chatBox.scrollHeight;
+          console.error(err);
+        });
       }
     });
 
@@ -174,4 +197,3 @@
   </script>
 </body>
 </html>
- 
