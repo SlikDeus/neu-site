@@ -6,6 +6,7 @@ const chatBox = document.getElementById("chat-box");
 sendButton.addEventListener("click", sendMessage);
 inputField.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
+    event.preventDefault(); // Добавлено предотвращение стандартного действия
     sendMessage();
   }
 });
@@ -59,7 +60,6 @@ function sendMessage() {
       appendMessage("ai", reply);
 
       if (reply.toLowerCase().includes("генерирую изображение")) {
-        // Простой пример генерации изображения с помощью Lorem Picsum (можно заменить на свою нейросеть)
         const prompt = encodeURIComponent(message);
         const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
         appendMessage("ai", imageUrl, true);
