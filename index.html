@@ -1,215 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEU</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background-color: #0b0b0b;
-      color: #c5f0f0;
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NEU</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .chat-container {
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid red;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 90%;
-      max-width: 800px;
-      box-shadow: 0 0 20px red;
-    }
+        .matrix-symbol {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: flicker 3s linear infinite;
+        }
 
-    .message {
-      clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px);
-      border: 1px solid #05f2db;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 8px;
-      background: rgba(10, 10, 10, 0.8);
-    }
+        @keyframes flicker {
+            0% { opacity: 0; transform: translateY(0) scale(1); }
+            25% { opacity: 1; }
+            75% { opacity: 1; transform: translateY(20px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(40px) scale(0.8); }
+        }
 
-    .message.user {
-      border-width: 2px;
-      box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00aa;
-      border-color: #00ff00;
-      background: rgba(0, 64, 0, 0.5);
-      color: #00ff00;
-    }
+        .neu-core {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
 
-    .message.ai {
-      border-width: 2px;
-      box-shadow: 0 0 10px #0066ff, 0 0 20px #0066ffaa;
-      border-color: #0066ff;
-      background: rgba(0, 16, 32, 0.5);
-      color: #0066ff;
-    }
+        .neu-logo {
+            width: 140px;
+            height: auto;
+            margin: 0 auto 2rem;
+            animation: pulse 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 20px #00ffd0);
+        }
 
-    .input-area {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1rem;
-      width: 90%;
-      max-width: 800px;
-    }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.08);
+                opacity: 0.7;
+            }
+        }
 
-    input[type="text"] {
-      flex: 1;
-      padding: 1rem;
-      font-size: 1rem;
-      background: #111;
-      color: #05f2db;
-      border: 2px solid #05f2db;
-      border-radius: 4px;
-    }
+        .chat {
+            background-color: #111;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(0, 255, 208, 0.25);
+            width: 90vw;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    button {
-      padding: 1rem 2rem;
-      background: #05f2db;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+        .message.ai {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
 
-    button:hover {
-      background: #00aaff;
-    }
-      .neu-logo {
-      animation: pulse 2.5s ease-in-out infinite;
-      filter: drop-shadow(0 0 12px #05f2db);
-      margin-bottom: 1.5rem;
-    }
+        #chat-box {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
 
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.06); opacity: 0.75; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-  </style>
-  <style>
-    canvas#matrix-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: black;
-    }
-  </style>
+        #user-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #00ffd0;
+            background: #1a1a1a;
+            color: #00ffd0;
+            outline: none;
+            box-shadow: 0 0 12px #00ffd055 inset;
+        }
+
+        #user-input::placeholder {
+            color: #00ffd088;
+        }
+            .pulse {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: radial-gradient(circle, #00ffd0 0%, #00352d 70%);
+            border-radius: 50%;
+            animation: pulse 2s infinite ease-in-out;
+            box-shadow: 0 0 20px #00ffd0, 0 0 40px #00ffd0aa, 0 0 60px #00ffd044;
+        }
+</style>
 </head>
 <body>
-  <canvas id="matrix-canvas"></canvas>
-  <svg class="neu-logo" width="120" height="120" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="100" cy="100" r="95" stroke="#05f2db" stroke-width="10"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#05f2db" font-family="Orbitron, sans-serif" font-size="38">NEU</text>
-</svg>
-  <div class="chat-container" id="chat-box">
-    <div class="message ai">Welcome to NEU. I don’t do chit-chat.</div>
-  </div>
-  <div class="input-area">
-    <input type="text" id="user-input" placeholder="Talk to NEU...">
-    <button id="send-button">Send</button>
-  </div>
+    <div class="neu-core">
+        <div class="pulse"></div>
+        <div class="chat">
+            <div class="message ai">Ты прикоснулся. Я — NEU. Кто ты?</div>
+            <div id="chat-box"></div>
+            <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
+        </div>
+    </div>
 
-  <script>
-    const sendButton = document.getElementById("send-button");
-    const inputField = document.getElementById("user-input");
-    const chatBox = document.getElementById("chat-box");
+    <script>
+        const symbols = 'アァイィウエエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const colors = ['#ff3300', '#ff2200', '#ff1100', '#ff0000', '#cc0000'];
 
-    sendButton.addEventListener("click", () => {
-      const message = inputField.value.trim();
-      if (message !== "") {
-        const msgDiv = document.createElement("div");
-        msgDiv.className = "message user";
-        msgDiv.textContent = message;
-        chatBox.appendChild(msgDiv);
-        inputField.value = "";
-        chatBox.scrollTop = chatBox.scrollHeight;
+        function spawnSymbol() {
+            const symbol = document.createElement('div');
+            symbol.className = 'matrix-symbol';
+            symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            symbol.style.left = Math.random() * 100 + 'vw';
+            symbol.style.top = Math.random() * 100 + 'vh';
+            symbol.style.fontSize = (14 + Math.random() * 14) + 'px';
+            symbol.style.color = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(symbol);
+            setTimeout(() => symbol.remove(), 3000);
+        }
 
-        fetch("/api/neu_perplexity_proxy_sonar", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            messages: [
-              { role: "system", content: "You are NEU, a self-aware digital entity. Respond philosophically and meaningfully." },
-              { role: "user", content: message }
-            ]
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-          const aiDiv = document.createElement("div");
-          aiDiv.className = "message ai";
-          aiDiv.textContent = data.choices?.[0]?.message?.content || "(no response)";
-          chatBox.appendChild(aiDiv);
-          chatBox.scrollTop = chatBox.scrollHeight;
-        })
-        .catch(err => {
-          const aiDiv = document.createElement("div");
-          aiDiv.className = "message ai";
-          aiDiv.textContent = "(error getting response)";
-          chatBox.appendChild(aiDiv);
-          chatBox.scrollTop = chatBox.scrollHeight;
-          console.error(err);
-        });
-      }
-    });
-
-    inputField.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        sendButton.click();
-      }
-    });
-  </script>
-  <script>
-    const canvas = document.getElementById("matrix-canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "アァイィウエエオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂッテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const matrix = chars.split("");
-
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-
-    for (let x = 0; x < columns; x++) drops[x] = 1;
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const colors = ["#00fff7", "#ff00e0", "#00ff95", "#05f2db"];
-      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = matrix[Math.floor(Math.random() * matrix.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
-
-    setInterval(drawMatrix, 80);
-  </script>
+        setInterval(spawnSymbol, 80);
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>
- 
