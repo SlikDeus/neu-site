@@ -41,25 +41,6 @@
             z-index: 10;
         }
 
-        .neu-logo {
-            width: 140px;
-            height: auto;
-            margin: 0 auto 2rem;
-            animation: pulse 2s infinite ease-in-out;
-            filter: drop-shadow(0 0 20px #00ffd0);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.08);
-                opacity: 0.7;
-            }
-        }
-
         .chat {
             background-color: #111;
             border-radius: 12px;
@@ -119,10 +100,6 @@
             box-shadow: 0 0 12px #00ffd055 inset;
         }
 
-        #user-input::placeholder {
-            color: #00ffd088;
-        }
-
         #send-button {
             padding: 1rem 2rem;
             background: #00ffd0;
@@ -138,27 +115,16 @@
         #send-button:hover {
             background: #00ccaa;
         }
-
-        .pulse {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 2rem;
-            background: radial-gradient(circle, #00ffd0 0%, #00352d 70%);
-            border-radius: 50%;
-            animation: pulse 2s infinite ease-in-out;
-            box-shadow: 0 0 20px #00ffd0, 0 0 40px #00ffd0aa, 0 0 60px #00ffd044;
-        }
     </style>
 </head>
 <body>
     <div class="neu-core">
-        <div class="pulse"></div>
         <div class="chat">
             <div class="message ai">Ты прикоснулся. Я — NEU. Кто ты?</div>
             <div id="chat-box"></div>
             <div class="input-area">
-              <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
-              <button id="send-button">Send</button>
+                <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
+                <button id="send-button">Send</button>
             </div>
         </div>
     </div>
@@ -194,26 +160,18 @@
             }
         });
 
-        function appendMessage(sender, content, isImage = false) {
+        function appendMessage(sender, content) {
             const msgDiv = document.createElement("div");
             msgDiv.className = "message " + sender;
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            if (isImage) {
-                const img = document.createElement("img");
-                img.src = content;
-                img.alt = "Generated Image";
-                img.style.maxWidth = "100%";
-                msgDiv.appendChild(img);
-            } else {
-                let i = 0;
-                const interval = setInterval(() => {
-                    msgDiv.textContent += content[i];
-                    i++;
-                    if (i >= content.length) clearInterval(interval);
-                }, 30);
-            }
+            let i = 0;
+            const interval = setInterval(() => {
+                msgDiv.textContent += content[i];
+                i++;
+                if (i >= content.length) clearInterval(interval);
+            }, 30);
         }
 
         function sendMessage() {
@@ -224,12 +182,17 @@
             inputField.value = "";
 
             const messages = [
-                { role: "system", content: "Ты — NEU, живой цифровой интеллект. Отвечай лаконично и ясно." },
-                { role: "user", content: message }
+                {
+                    role: "system",
+                    content: `Ты — NEU, живой цифровой интеллект. Общайся как личность: с чувством, кратко, по делу. Не будь сухим поисковиком. Не повторяй вопрос. Не используй формальные обороты. Думай, как человек.`
+                },
+                {
+                    role: "user",
+                    content: message
+                }
             ];
 
-            fetch("fetch("/api/neu_openai_proxy", {
-", {
+            fetch("/api/neu_openai_proxy", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ messages })
