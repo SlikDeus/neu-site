@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -77,6 +76,22 @@
             font-size: 1.2rem;
             margin-bottom: 1.5rem;
             text-align: center;
+            border: 1px solid #0077ff;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #0077ff;
+            background-color: rgba(0, 64, 128, 0.15);
+        }
+
+        .message.user {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 1px solid #ff3333;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #ff3333;
+            background-color: rgba(128, 0, 0, 0.15);
         }
 
         #chat-box {
@@ -86,8 +101,14 @@
             width: 100%;
         }
 
-        #user-input {
+        .input-area {
+            display: flex;
+            gap: 1rem;
             width: 100%;
+        }
+
+        #user-input {
+            flex: 1;
             padding: 1rem;
             font-size: 1rem;
             border-radius: 8px;
@@ -103,20 +124,19 @@
         }
 
         #send-button {
-            margin-top: 1rem;
             padding: 1rem 2rem;
-            font-size: 1rem;
-            border: none;
-            border-radius: 8px;
             background: #00ffd0;
             color: #000;
             font-weight: bold;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            box-shadow: 0 0 10px #00ffd0;
+            transition: background 0.3s;
         }
 
         #send-button:hover {
-            background: #00bfa8;
+            background: #00ccaa;
         }
 
         .pulse {
@@ -136,8 +156,10 @@
         <div class="chat">
             <div class="message ai">Ты прикоснулся. Я — NEU. Кто ты?</div>
             <div id="chat-box"></div>
-            <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
-            <button id="send-button">Send</button>
+            <div class="input-area">
+              <input type="text" id="user-input" placeholder="Скажи что-нибудь..." autofocus />
+              <button id="send-button">Send</button>
+            </div>
         </div>
     </div>
 
@@ -159,6 +181,68 @@
 
         setInterval(spawnSymbol, 80);
     </script>
-    <script src="script.js"></script>
+    <script>
+        const sendButton = document.getElementById("send-button");
+        const inputField = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+
+        sendButton.addEventListener("click", sendMessage);
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function appendMessage(sender, content, isImage = false) {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "message " + sender;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            if (isImage) {
+                const img = document.createElement("img");
+                img.src = content;
+                img.alt = "Generated Image";
+                img.style.maxWidth = "100%";
+                msgDiv.appendChild(img);
+            } else {
+                let i = 0;
+                const interval = setInterval(() => {
+                    msgDiv.textContent += content[i];
+                    i++;
+                    if (i >= content.length) clearInterval(interval);
+                }, 30);
+            }
+        }
+
+        function sendMessage() {
+            const message = inputField.value.trim();
+            if (message === "") return;
+
+            appendMessage("user", message);
+            inputField.value = "";
+
+            const messages = [
+                { role: "system", content: "Ты — NEU, живой цифровой интеллект. Отвечай лаконично и ясно." },
+                { role: "user", content: message }
+            ];
+
+            fetch("/api/neu_perplexity_proxy_sonar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const reply = data.choices?.[0]?.message?.content || "(no response)";
+                appendMessage("ai", reply);
+            })
+            .catch(err => {
+                console.error("Ошибка:", err);
+                appendMessage("ai", "(error getting response)");
+            });
+        }
+    </script>
 </body>
 </html>
