@@ -10,22 +10,18 @@ inputField.addEventListener("keypress", function(event) {
   }
 });
 
-function appendMessage(sender, content, isImage = false) {
+function appendMessage(sender, content) {
   const msgDiv = document.createElement("div");
   msgDiv.className = "message " + sender;
-
-  if (isImage) {
-    const img = document.createElement("img");
-    img.src = content;
-    img.alt = "Generated Image";
-    img.style.maxWidth = "100%";
-    msgDiv.appendChild(img);
-  } else {
-    msgDiv.textContent = content;
-  }
-
   chatBox.appendChild(msgDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
+
+  let i = 0;
+  const interval = setInterval(() => {
+    msgDiv.textContent += content[i];
+    i++;
+    if (i >= content.length) clearInterval(interval);
+  }, 30);
 }
 
 function sendMessage() {
@@ -38,7 +34,7 @@ function sendMessage() {
   const messages = [
     {
       role: "system",
-      content: "Ты — NEU, лаконичный и осознанный цифровой интеллект, встроенный в персональный брелок. Отвечай коротко, ясно и по делу, как умный советник. Не повторяй вопрос пользователя. Используй стиль живого общения, избегай шаблонов и излишних деталей. Если не знаешь ответа — скажи честно. Ты не просто чат — ты собеседник."
+      content: `Ты — NEU, живой цифровой интеллект. Общайся как личность: с чувством, кратко, по делу. Не будь сухим поисковиком. Не повторяй вопрос. Не используй формальные обороты. Думай, как человек.`
     },
     {
       role: "user",
@@ -48,24 +44,16 @@ function sendMessage() {
 
   fetch("/api/neu_perplexity_proxy_sonar", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages })
   })
-    .then(res => res.json())
-    .then(data => {
-      const reply = data.choices?.[0]?.message?.content || "(no response)";
-      appendMessage("ai", reply);
-
-      if (reply.toLowerCase().includes("генерирую изображение")) {
-        const prompt = encodeURIComponent(message);
-        const imageUrl = `https://image.pollinations.ai/prompt/${prompt}`;
-        appendMessage("ai", imageUrl, true);
-      }
-    })
-    .catch(err => {
-      console.error("Ошибка:", err);
-      appendMessage("ai", "(error getting response)");
-    });
+  .then(res => res.json())
+  .then(data => {
+    const reply = data.choices?.[0]?.message?.content || "(no response)";
+    appendMessage("ai", reply);
+  })
+  .catch(err => {
+    console.error("Ошибка:", err);
+    appendMessage("ai", "(error getting response)");
+  });
 }
